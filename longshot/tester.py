@@ -19,17 +19,25 @@ def should_fail(self):
 
 class BaseSiteTestCase(unittest.TestCase):
     SITE_URL = None
+    browser = None
 
     @classmethod
     def setUpClass(cls):
         driver_name = os.environ.get("SELENIUM_DRIVER", "firefox")
-        cls.browser = WebDriver(driver_name).get(cls.SITE_URL)
+        cls.browser = WebDriver(driver_name, reuse_browser=True)
+        cls.browser.maximize_window()
+        cls.browser = cls.browser.get(cls.SITE_URL)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.quit()
 
     def navigate(self, path):
         full_url = urljoin(self.SITE_URL, path)
 
         if full_url != self.browser.current_url:
             self.browser.get(full_url)
+
 
 
 class Runner(object):
