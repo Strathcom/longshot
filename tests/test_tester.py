@@ -9,17 +9,17 @@ class TestTester(unittest.TestCase):
             'site': 'foo',
             'tests': ''
         }
-        test = tester.SingleTest(config)
+        test = tester.Runner(config)
         self.assertEqual(test.site, config['site'])
 
     def test_should_complain_with_missing_site(self):
         config = {
             'tests': ''
         }
-        self.assertRaises(AssertionError, tester.SingleTest, (config))
+        self.assertRaises(AssertionError, tester.Runner, (config))
 
     def test_should_complain_with_missing_tests(self):
         config = {
             'site': ''
         }
-        self.assertRaises(AssertionError, tester.SingleTest, (config))
+        self.assertRaises(AssertionError, tester.Runner, (config))

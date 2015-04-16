@@ -13,6 +13,7 @@ extras = {
     'develop': [
         'nose',
         'pinocchio',
+        'mock',
     ]
 }
 
