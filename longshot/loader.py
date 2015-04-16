@@ -33,20 +33,14 @@ def process(data):
 
     out = {}
     out['site'] = sanitize_header(first_row)  # should be the site
-    out['tests'] = {}
+    out['tests'] = []
     rows = [parse_row(r) for r in data]
     for row in rows:
         path = row[0]
         expression = row[1]
         action = row[2]
         value = row[3]
-        if path not in out['tests']:
-            out['tests'][path] = []
-        out['tests'][path].append({
-            'expression': expression,
-            'action': action,
-            'value': value
-            })
+        out['tests'].append((path, expression, action, value))
 
     return out
 

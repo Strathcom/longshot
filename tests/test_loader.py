@@ -49,13 +49,7 @@ class TestLoader(unittest.TestCase):
         config = loader.parse(path)
         expected = {
             'site': 'www.strathcom.ca',
-            'tests': {
-                '/': [{
-                    'expression': 'h2',
-                    'action': 'text',
-                    'value': 'One Dealer Platform: Unlimited Potential'
-                }]
-            }
+            'tests': [('/', 'h2', 'text', 'One Dealer Platform: Unlimited Potential')],  # noqa
         }
 
         self.assertDictEqual(config, expected)
