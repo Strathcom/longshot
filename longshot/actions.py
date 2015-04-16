@@ -13,7 +13,8 @@ def text_action(self, path, element_specifier, expected_value):
 
     if expected_value.startswith('^'):
         expected_value = expected_value[1:]
-        self.assertTrue(actual_value.startswith(expected_value))
+        actual_value = actual_value[:len(expected_value)]
+        self.assertEqual(expected_value, actual_value)
     elif expected_value.startswith('~'):
         expected_value = expected_value[1:]
         self.assertIn(expected_value, actual_value)
