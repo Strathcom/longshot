@@ -46,6 +46,7 @@ dist/
 
 *.sublime-project
 *.sublime-workspace
+.idea
 
 Vagrantfile
 .vagrant

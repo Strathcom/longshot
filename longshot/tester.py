@@ -1,10 +1,29 @@
 import unittest
 
+from urlparse import urljoin
+from webdriverplus import WebDriver
+
+
 def should_pass(self):
     self.assertTrue(True)
 
+
 def should_fail(self):
     self.assertTrue(False)
+
+
+class BaseSiteTestCase(unittest.TestCase):
+    SITE_URL = None
+
+    @classmethod
+    def setUpClass(cls):
+        cls.browser = WebDriver().get(cls.SITE_URL)
+
+    def navigate(self, path):
+        full_url = urljoin(self.SITE_URL, path)
+
+        if full_url != self.browser.current_url:
+            self.browser.get(full_url)
 
 
 class Runner(object):
@@ -16,7 +35,6 @@ class Runner(object):
         self.site = config.get('site')
         self.tests = config.get('tests')
 
-
     def build_test(self):
 
         methods = {
@@ -24,7 +42,7 @@ class Runner(object):
             'test_should_fail': should_fail,
         }
 
-        self.test_case = type('MyTestCase', (unittest.TestCase,), methods)
+        self.test_case = type('MyTestCase', (BaseSiteTestCase,), methods)
 
     def run(self):
 
@@ -58,15 +76,4 @@ if __name__ == "__main__":
         ]
         })
 
-    # runner.build_test()
     runner.run()
-
-
-
-
-
-
-
-
-
-
