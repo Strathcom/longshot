@@ -16,6 +16,7 @@ class Runner(object):
         self.site = config.get('site')
         self.tests = config.get('tests')
 
+
     def build_test(self):
 
         methods = {
@@ -27,9 +28,7 @@ class Runner(object):
 
     def run(self):
 
-        # test item should be 3 length
-        # assert len(self.test) == 3, 'test has incorrect number of parameters'
-        # test_case = self.test_case.initialize()
+        self.build_test()
 
         test_suite = unittest.TestLoader().loadTestsFromTestCase(self.test_case)
         result = unittest.TestResult()
@@ -39,9 +38,16 @@ class Runner(object):
             print err
         for fail in result.failures:
             print fail
+
+        # TODO: better output
         # import pdb; pdb.set_trace()
 
         # self.test_case.run()
+
+
+def run(config):
+    runner = Runner(config)
+    return runner.run()
 
 
 if __name__ == "__main__":
@@ -52,7 +58,7 @@ if __name__ == "__main__":
         ]
         })
 
-    runner.build_test()
+    # runner.build_test()
     runner.run()
 
 
