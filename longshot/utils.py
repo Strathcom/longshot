@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
+import urlparse
 
 
 ACTION_METHOD_NAME_MAP = {
@@ -15,8 +16,8 @@ ACTION_METHOD_NAME_MAP = {
 METHOD_NAME_ALLOW_CHARS_REGEX = re.compile(r"[^A-Za-z0-9_]")
 
 
-def generate_python_method_name(path, element_specifier, action, expected_value):
-    method_name = 'test_'
+def generate_test_method_name(path, element_specifier, action, expected_value):
+    generated_name = 'test_'
     path_ = path.replace('/', '_').replace('-', '_')
     action_ = action.strip().lower()
     expected_value_ = expected_value.strip().lower()
@@ -34,22 +35,30 @@ def generate_python_method_name(path, element_specifier, action, expected_value)
     if len(expected_value_) > 40:
         expected_value_ = expected_value_[:40]
 
-    method_name = (method_name + '_' + path_ + '_' + element_specifier + '_' +
-                   action_ + '_' + expected_value_)
-    method_name = method_name.strip('_')
-    method_name = METHOD_NAME_ALLOW_CHARS_REGEX.sub('', method_name)
+    generated_name = (generated_name + '_' + path_ + '_' + element_specifier +
+                      '_' + action_ + '_' + expected_value_)
+    generated_name = generated_name.strip('_')
+    generated_name = METHOD_NAME_ALLOW_CHARS_REGEX.sub('', generated_name)
 
-    while '__' in method_name:
-        method_name = method_name.replace('__', '_')
+    while '__' in generated_name:
+        generated_name = generated_name.replace('__', '_')
 
-    return method_name
+    return generated_name
 
 
-if __name__ == '__main__':
-    # some_action('http://google.com', '/about', 'blockquote', 'text', u'Google’s mission is to organize the world’s information and make it universally accessible and useful.')
-    print generate_python_method_name('/about', 'h2 #my-element', 'text', u'Google’s mission is to organize the world’s information and make it universally accessible and useful.')
-    print generate_python_method_name('/contact-us', '#main-contact-form', 'submit', '/contact-us/success/')
-    print generate_python_method_name('/contact-us', '#contact-name-field', 'value', 'Testy Testerson')
-    print generate_python_method_name('/', '#sidebar', 'css-height', '100px')
-    print generate_python_method_name('/', '#main-slider img[0]', 'click', '/specials/')
-    print generate_python_method_name('/', 'html', 'source', 'UA-12345')
+def generate_test_class_name(site_url):
+    site_url = urlparse.urlparse(site_url)
+
+    assert site_url.hostname is not None
+
+    generated_name = ''
+
+    for hostname_part in site_url.hostname.split('.'):
+        generated_name += hostname_part.capitalize()
+
+    generated_name += 'TestCase'
+
+    if generated_name[0].isdigit():
+        generated_name = 'Site' + generated_name
+
+    return generated_name

@@ -2,7 +2,29 @@
 
 import unittest
 
-from longshot.utils import generate_python_method_name
+from longshot.utils import (generate_test_method_name,
+                            generate_test_class_name)
+
+
+class GeneratePythonClassNameTestCase(unittest.TestCase):
+
+    def test_should_throw_assert_error_for_invalid_url(self):
+        with self.assertRaises(AssertionError):
+            generate_test_class_name('www.this-is-missing-a-protocol.com')
+
+    def test_should_generate_expected_class_names(self):
+        test_samples = [
+            {'args': ('http://www.google.com', ),
+             'expected_value': 'WwwGoogleComTestCase'},
+            {'args': ('http://www.revolutionkia.com', ),
+             'expected_value': 'WwwRevolutionkiaComTestCase'},
+            {'args': ('http://192.168.0.1/', ),
+             'expected_value': 'Site19216801TestCase'},
+        ]
+
+        for sample in test_samples:
+            actual_value = generate_test_class_name(*sample['args'])
+            self.assertEqual(actual_value, sample['expected_value'])
 
 
 class GeneratePythonMethodNameTestCase(unittest.TestCase):
@@ -24,7 +46,7 @@ class GeneratePythonMethodNameTestCase(unittest.TestCase):
         ]
 
         for sample in test_samples:
-            actual_value = generate_python_method_name(*sample['args'])
+            actual_value = generate_test_method_name(*sample['args'])
             self.assertEqual(actual_value, sample['expected_value'])
 
 
