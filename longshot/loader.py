@@ -34,7 +34,7 @@ def process(data):
     out = {}
     out['site'] = sanitize_header(first_row)  # should be the site
     out['tests'] = []
-    rows = [parse_row(r) for r in data]
+    rows = [parse_row(r) for r in data if r.startswith('/')]
     for row in rows:
         path = row[0]
         expression = row[1]

@@ -48,7 +48,7 @@ class TestLoader(unittest.TestCase):
         path = os.path.join(os.path.dirname(__file__), 'data/test_site.txt')
         config = loader.parse(path)
         expected = {
-            'site': 'www.strathcom.ca',
+            'site': 'http://www.strathcom.ca',
             'tests': [('/', 'h2', 'text', 'One Dealer Platform: Unlimited Potential')],  # noqa
         }
 
