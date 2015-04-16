@@ -5,6 +5,7 @@ from longshot import __title__ as title
 from longshot import __version__ as version
 
 required = [
+    'webdriverplus',
 ]
 
 extras = {
