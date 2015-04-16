@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from urlparse import urljoin
 from webdriverplus import WebDriver
@@ -21,7 +22,8 @@ class BaseSiteTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = WebDriver().get(cls.SITE_URL)
+        driver_name = os.environ.get("SELENIUM_DRIVER", "firefox")
+        cls.browser = WebDriver(driver_name).get(cls.SITE_URL)
 
     def navigate(self, path):
         full_url = urljoin(self.SITE_URL, path)
