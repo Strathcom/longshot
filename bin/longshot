@@ -8,7 +8,7 @@ from longshot import loader, tester
 @click.argument('config', type=click.Path(exists=True))
 def main(config):
     parsed_config = loader.parse(config)
-    # tester.run()
+    tester.run(parsed_config)
     print('done')
 
 

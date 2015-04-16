@@ -3,6 +3,10 @@ import unittest
 from urlparse import urljoin
 from webdriverplus import WebDriver
 
+from longshot.actions import create_action
+from longshot.utils import generate_test_class_name, \
+    generate_test_method_name
+
 
 def should_pass(self):
     self.assertTrue(True)
@@ -34,15 +38,24 @@ class Runner(object):
 
         self.site = config.get('site')
         self.tests = config.get('tests')
+        self.test_case = None
 
     def build_test(self):
 
-        methods = {
-            'test_should_pass': should_pass,
-            'test_should_fail': should_fail,
-        }
+        class_name = generate_test_class_name(self.site)
+        members = {'SITE_URL': self.site}
 
-        self.test_case = type('MyTestCase', (BaseSiteTestCase,), methods)
+        for test in self.tests:
+            path, element_specifier, action, expected_value = test
+            method_name = generate_test_method_name(path, element_specifier,
+                                                    action, expected_value)
+            assert method_name not in members, (method_name + " already exists "
+                                                "-- duplicate test?")
+            test_method = create_action(path, element_specifier, action,
+                                        expected_value)
+            members[method_name] = test_method
+
+        self.test_case = type(class_name, (BaseSiteTestCase,), members)
 
     def run(self):
 
@@ -70,10 +83,10 @@ def run(config):
 
 if __name__ == "__main__":
     runner = Runner({
-        'site': 'uptime.is',
+        'site': 'http://uptime.is',
         'tests': [
-            ('/', 'h1:text', 'Uptime and downtime with 99.9 % SLA'),
+            ('/', 'h1', 'text', 'Uptime and downtime with 99.9 % SLxxxA'),
         ]
-        })
+    })
 
     runner.run()

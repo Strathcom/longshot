@@ -11,9 +11,7 @@ def text_action(self, path, element_specifier, expected_value):
     self.assertEqual(expected_value, actual_value)
 
 
-def create_action(test_config):
-    path, element_specifier, action, expected_value = test_config
-
+def create_action(path, element_specifier, action, expected_value):
     if action == "text":
         def _text_action_proxy(self):
             return text_action(self, path, element_specifier, expected_value)
