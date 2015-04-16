@@ -5,6 +5,9 @@ def text_action(self, path, element_specifier, expected_value):
     self.navigate(path)
     element = self.browser.find(element_specifier)
 
+    assert element is not None, ("Could not find element for selector: " +
+                                 element_specifier)
+
     expected_value = expected_value.encode("ascii", "ignore").lower().strip()
     actual_value = element.text.encode("ascii", "ignore").lower().strip()
 
